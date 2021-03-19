@@ -145,7 +145,7 @@ def report_all():
         else:
             email, cookie = lines
             ret = report(cookie)
-            if ret["e"] == 1:
+            if ret["e"] != 0:
                 print(f"[WARN] {i}: {ret}")
                 send_email(i, email, ret)
             else:
