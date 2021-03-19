@@ -9,6 +9,10 @@ from email.mime.text import MIMEText
 ROOT = osp.dirname(__file__)
 
 
+def cookie_is_valid(cookie: str):
+    return "eai-sess=" in cookie
+
+
 def report(cookie: str):
     url = "https://healthreport.zju.edu.cn/ncov/wap/default/save"
 
@@ -20,11 +24,9 @@ def report(cookie: str):
         "accept": "application/json, text/javascript, */*; q=0.01",
         "accept-encoding": "gzip, deflate, br",
         "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-US;q=0.7",
-        "content-length": "2073",
         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
         "cookie": cookie,
         "origin": "https://healthreport.zju.edu.cn",
-        "referer": "https://healthreport.zju.edu.cn/ncov/wap/default/index?ticket=ST-1842857-fMc2CXG75U6Buh7jzkE7-zju.edu.cn",
         "sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
         "sec-ch-ua-mobile": "?0",
         "sec-fetch-dest": "empty",
@@ -144,10 +146,14 @@ def report_all():
             print(f"[WARN] skip profile {i}")
         else:
             email, cookie = lines
+            if not cookie_is_valid(cookie):
+                print(f"[WARN] {i}'s cookie is not valid")
+                continue
             ret = report(cookie)
             if ret["e"] != 0:
                 print(f"[WARN] {i}: {ret}")
-                send_email(i, email, ret)
+                if ret["e"] != 1:
+                    send_email(i, email, ret)
             else:
                 print(f"[INFO] {i} reports successfully")
 
