@@ -17,4 +17,4 @@ jobs:
       - name: Install packages
         run: pip install requests
       - name: Report
-        run: python main.py '${{secrets.COOKIES}}''
+        run: python main.py '${{secrets.COOKIES}}'
