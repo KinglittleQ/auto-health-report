@@ -109,15 +109,15 @@ def report(cookie: str):
 def report_all():
     assert len(sys.argv) == 2
     cookie = sys.argv[1]
-    assert cookie_is_valid(cookie):
+    assert cookie_is_valid(cookie)
 
     ret = report(cookie)
     if ret["e"] != 0:
-        print(f"[WARN] {i}: {ret}")
+        print(f"[WARN]: {ret}")
         if ret["e"] != 1:
-            raise RuntimeError(f'{i}: {ret}')
+            raise RuntimeError(f'{ret}')
     else:
-        print(f"[INFO] {i} reports successfully")
+        print(f"[INFO] report successfully")
 
 
 if __name__ == "__main__":
