@@ -1,10 +1,7 @@
 import requests
 import os
 import os.path as osp
-import socket
-import ssl
-import smtplib
-from email.mime.text import MIMEText
+import sys
 
 ROOT = osp.dirname(__file__)
 
@@ -109,56 +106,20 @@ def report(cookie: str):
     return r.json()
 
 
-def send_email(profile, email, ret):
-    msg = MIMEText(f"""
-敬爱的先生/女士：
-    您的每日自动上报（{profile}）出现了一些小问题，可能需要联系管理员确认一切正常。
-    报错信息是：{ret}
-    
-    祝 科研顺利！
-
-    每日自动上报bot
-""")
-
-    with open(osp.join(ROOT, ".emailpassword"), "r") as f:
-        me, password = f.read().split('\n')[:2]
-        me = me.strip()
-
-    msg['Subject'] = "每日自动上报警告"
-    msg['From'] = me
-    msg['To'] = email
-
-    context = ssl.create_default_context()
-
-    with smtplib.SMTP_SSL("smtp.qq.com", 465, context=context) as server:
-        server.login(me, password)
-        server.sendmail(
-            me, email, msg.as_string()
-        )
-
-
 def report_all():
-    path = osp.join(ROOT, "registers")
-    registers = os.listdir(path)
-    for i in registers:
-        f = open(osp.join(path, i), "r")
-        content = f.read()
-        f.close()
-        lines = content.split('\n')[:2]
-        if len(lines) < 2:
-            print(f"[WARN] skip profile {i}")
-        else:
-            email, cookie = lines
-            if not cookie_is_valid(cookie):
-                print(f"[WARN] {i}'s cookie is not valid")
-                continue
-            ret = report(cookie)
-            if ret["e"] != 0:
-                print(f"[WARN] {i}: {ret}")
-                if ret["e"] != 1:
-                    send_email(i, email, ret)
-            else:
-                print(f"[INFO] {i} reports successfully")
+    assert len(sys.argv) == 2
+    cookie = sys.argv[1]
+
+    if not cookie_is_valid(cookie):
+        print(f"[WARN] {i}'s cookie is not valid")
+        continue
+    ret = report(cookie)
+    if ret["e"] != 0:
+        print(f"[WARN] {i}: {ret}")
+        if ret["e"] != 1:
+            raise RuntimeError(f'{i}: {ret}')
+    else:
+        print(f"[INFO] {i} reports successfully")
 
 
 if __name__ == "__main__":

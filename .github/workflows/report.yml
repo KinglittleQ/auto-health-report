@@ -1,0 +1,20 @@
+name: auto-health-report
+on: [push]
+# on:
+#   schedule:
+#     - cron: "0 8 * * *"
+
+jobs:
+  auto-health-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Install Python3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Install packages
+        run: pip install requests
+      - name: Report
+        run: python main.py
