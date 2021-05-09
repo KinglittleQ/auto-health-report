@@ -109,10 +109,8 @@ def report(cookie: str):
 def report_all():
     assert len(sys.argv) == 2
     cookie = sys.argv[1]
+    assert cookie_is_valid(cookie):
 
-    if not cookie_is_valid(cookie):
-        print(f"[WARN] {i}'s cookie is not valid")
-        continue
     ret = report(cookie)
     if ret["e"] != 0:
         print(f"[WARN] {i}: {ret}")
