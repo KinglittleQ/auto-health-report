@@ -59,9 +59,12 @@ def report(cookie: str):
         "sfqrxxss": "1",
         "sfqtyyqjwdg": "0",
         "sffrqjwdg": "0",
-        "sfhsjc": "1",
+        "sfhsjc": "",
         "zgfx14rfh": "0",
         "zgfx14rfhdd": "",
+        "sfyxjzxgym": "1",
+        "sfbyjzrq": "5",
+        "jzxgymqk": "1",
         "tw": "0",
         "sfcxtz": "0",
         "sfjcbh": "0",
@@ -99,7 +102,7 @@ def report(cookie: str):
         "szgjcs": "",
         "fxyy": "",
         "jcjg": "",
-        "zgfx14rfhsj": ""
+        "zgfx14rfhsj": "",
     }
 
     r = requests.post(url, data=payload, headers=headers)
