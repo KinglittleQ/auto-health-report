@@ -1,8 +1,10 @@
 name: auto-health-report
-on: [push]
-# on:
-#   schedule:
-#     - cron: "0 * * * *"
+on:
+  push:
+  issues:
+    types: [opened, edited]
+  schedule:
+    - cron: "0 * * * *"
 
 jobs:
   auto-health-report:
