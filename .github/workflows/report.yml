@@ -2,7 +2,7 @@ name: auto-health-report
 on:
   push:
   schedule:
-    - cron: "30 */8 * * *"
+    - cron: "30 */10 * * *"  # every 10 hours
 
 jobs:
   auto-health-report:
